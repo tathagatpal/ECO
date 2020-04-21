@@ -28,6 +28,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 
@@ -35,8 +38,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int RC_SIGN_IN =123 ;
     //auth variables
     private FirebaseAuth auth;
-
-
+    private FirebaseUser user;
+    private DatabaseReference database;
 
 
 
@@ -82,19 +85,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         getLocationPermission();
-
+        database = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
         if(auth.getCurrentUser()!=null){
             //signed in
+            user = auth.getCurrentUser();
         }
         else{
             //not signed in
             startActivity(new Intent(this,SignInActivity.class));
             finish();
         }
+        
+
     }
-
-
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting current location");
 
