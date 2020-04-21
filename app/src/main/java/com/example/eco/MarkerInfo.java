@@ -6,14 +6,24 @@ public class MarkerInfo {
     private Double lat;
     private Double lon;
     private String user;
+    private String userName;
     private int rating;
     private int type;
 
 
-    public MarkerInfo(Double lat, Double lon, String user, int rating, int type) {
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public MarkerInfo(Double lat, Double lon, String user, String userName, int rating, int type) {
         this.lat = lat;
         this.lon = lon;
         this.user = user;
+        this.userName = userName;
         this.rating = rating;
         this.type = type;
     }

@@ -234,14 +234,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                .icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground));
 //        mMap.addMarker(markerOptions);
 //
-        MarkerInfo mInfo = new MarkerInfo(latLng.latitude, latLng.longitude, user.getUid(), 0,0);
+        MarkerInfo mInfo = new MarkerInfo(latLng.latitude, latLng.longitude, user.getUid(),user.getDisplayName(), 0,0);
         database.push().setValue(mInfo);
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
         Toast.makeText(MapsActivity.this, "Wait for Info" , Toast.LENGTH_LONG).show();
-        startActivity(new Intent(MapsActivity.this, MarkerData.class));
+        Intent mIntent = new Intent(MapsActivity.this, MarkerData.class);
+        mIntent.putExtra("name",MarkerMap.get(marker).getUserName());
+        mIntent.putExtra("rating",MarkerMap.get(marker).getRating());
+        startActivity(mIntent);
         return false;
     }
 }
