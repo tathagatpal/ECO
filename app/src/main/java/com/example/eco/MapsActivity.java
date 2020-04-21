@@ -76,7 +76,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     MarkerInfo mInfo = dataSnapshot.getValue(MarkerInfo.class);
                     Marker m = mMap.addMarker(new MarkerOptions().position(new LatLng(mInfo.getLat(),mInfo.getLon())).icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground)));
                     MarkerMap.put(m,mInfo);
-                    Toast.makeText(MapsActivity.this,"uouououu",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MapsActivity.this,"uouououu",Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -240,7 +240,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(MapsActivity.this, "Show data" , Toast.LENGTH_LONG).show();
+        Toast.makeText(MapsActivity.this, "Wait for Info" , Toast.LENGTH_LONG).show();
+        startActivity(new Intent(MapsActivity.this, MarkerData.class));
         return false;
     }
 }

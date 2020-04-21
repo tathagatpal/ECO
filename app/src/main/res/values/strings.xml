@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ECO</string>
     <string name="title_activity_maps">Map</string>
+    <string name="marker_s_data">About this Location</string>
 </resources>
