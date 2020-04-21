@@ -29,10 +29,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
     private static final int RC_SIGN_IN =123 ;
@@ -42,14 +48,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DatabaseReference database;
 
 
-
+    private HashMap<Marker, MarkerInfo> MarkerMap;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Opening Map", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
         mMap = googleMap;
-
+        MarkerMap = new HashMap<Marker, MarkerInfo>();
         if(mLocationPermissionGranted){
             getDeviceLocation();
 
@@ -62,6 +68,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.getUiSettings().setAllGesturesEnabled(true);
             mMap.setOnMapClickListener(this);
             mMap.setOnMarkerClickListener(this);
+
+
+            ChildEventListener cEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    MarkerInfo mInfo = dataSnapshot.getValue(MarkerInfo.class);
+                    Marker m = mMap.addMarker(new MarkerOptions().position(new LatLng(mInfo.getLat(),mInfo.getLon())).icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground)));
+                    MarkerMap.put(m,mInfo);
+                    Toast.makeText(MapsActivity.this,"uouououu",Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+            database.addChildEventListener(cEventListener);
         }
     }
 
@@ -96,7 +134,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(new Intent(this,SignInActivity.class));
             finish();
         }
-        
+
 
     }
     private void getDeviceLocation(){
@@ -187,14 +225,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Toast.makeText(MapsActivity.this,
-                "Location Marked",
-                Toast.LENGTH_SHORT).show();
-
-        //Add marker on LongClick position
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(latLng.toString())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground));
-        mMap.addMarker(markerOptions);
+//        Toast.makeText(MapsActivity.this,
+//                "Location Marked",
+//                Toast.LENGTH_SHORT).show();
+//
+//        //Add marker on LongClick position
+//        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(latLng.toString())
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground));
+//        mMap.addMarker(markerOptions);
+//
+        MarkerInfo mInfo = new MarkerInfo(latLng.latitude, latLng.longitude, user.getUid(), 0,0);
+        database.push().setValue(mInfo);
     }
 
     @Override

@@ -3,10 +3,20 @@ package com.example.eco;
 import com.google.android.gms.maps.model.LatLng;
 
 public class MarkerInfo {
-    private LatLng location;
+    private Double lat;
+    private Double lon;
     private String user;
     private int rating;
     private int type;
+
+
+    public MarkerInfo(Double lat, Double lon, String user, int rating, int type) {
+        this.lat = lat;
+        this.lon = lon;
+        this.user = user;
+        this.rating = rating;
+        this.type = type;
+    }
 
     public int getType() {
         return type;
@@ -19,18 +29,21 @@ public class MarkerInfo {
     public MarkerInfo(){
 
     }
-    public MarkerInfo(LatLng loc, String user, int rating){
-        this.location = loc;
-        this.user = user;
-        this.rating = rating;
+
+    public Double getLat() {
+        return lat;
     }
 
-    public LatLng getLocation() {
-        return location;
+    public void setLat(Double lat) {
+        this.lat = lat;
     }
 
-    public void setLocation(LatLng location) {
-        this.location = location;
+    public Double getLon() {
+        return lon;
+    }
+
+    public void setLon(Double lon) {
+        this.lon = lon;
     }
 
     public String getUser() {
