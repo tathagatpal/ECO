@@ -1,6 +1,7 @@
 package com.example.eco;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,8 +27,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Arrays;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+    private static final int RC_SIGN_IN =123 ;
+    //auth variables
+    private FirebaseAuth auth;
+
+
+
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -69,6 +82,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         getLocationPermission();
+
+        auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser()!=null){
+            //signed in
+        }
+        else{
+            //not signed in
+            startActivity(new Intent(this,SignInActivity.class));
+            finish();
+        }
     }
 
 
