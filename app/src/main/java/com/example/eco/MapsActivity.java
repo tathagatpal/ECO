@@ -21,11 +21,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -44,6 +45,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setAllGesturesEnabled(true);
             mMap.setOnMapClickListener(this);
+            mMap.setOnMarkerClickListener(this);
         }
     }
 
@@ -58,6 +60,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean mLocationPermissionGranted = false;
     GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+
+    //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -163,6 +168,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(latLng.toString())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground));
         mMap.addMarker(markerOptions);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(MapsActivity.this, "Show data" , Toast.LENGTH_LONG).show();
+        return false;
     }
 }
 
