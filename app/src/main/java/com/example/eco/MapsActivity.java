@@ -222,7 +222,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
     @Override
     public void onMapClick(LatLng latLng) {
 //        Toast.makeText(MapsActivity.this,
@@ -234,8 +233,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                .icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground));
 //        mMap.addMarker(markerOptions);
 //
-        MarkerInfo mInfo = new MarkerInfo(latLng.latitude, latLng.longitude, user.getUid(),user.getDisplayName(), 0,0);
-        database.push().setValue(mInfo);
+        Intent myIntent = new Intent(MapsActivity.this, Cam.class);
+        myIntent.putExtra("lat", latLng.latitude);
+        myIntent.putExtra("lon", latLng.longitude);
+        startActivity(myIntent);
+//        MarkerInfo mInfo = new MarkerInfo(latLng.latitude, latLng.longitude, user.getUid(),user.getDisplayName(), 0,0);
+//        database.push().setValue(mInfo);
     }
 
     @Override
