@@ -306,7 +306,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 }
                             });
                             AlertDialog delMark = del.create();
-                            delMark.setTitle("Alert");
+                            delMark.setTitle("Alert!");
                             delMark.show();
                         }
                 });
