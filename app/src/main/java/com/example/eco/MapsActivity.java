@@ -49,13 +49,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private HashMap<Marker, MarkerInfo> MarkerMap;
-
+    private HashMap<Marker, String> imgList;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Opening Map", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onMapReady: Map is ready");
         mMap = googleMap;
         MarkerMap = new HashMap<Marker, MarkerInfo>();
+        imgList = new HashMap<Marker, String>();
         if(mLocationPermissionGranted){
             getDeviceLocation();
 
@@ -76,6 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     MarkerInfo mInfo = dataSnapshot.getValue(MarkerInfo.class);
                     Marker m = mMap.addMarker(new MarkerOptions().position(new LatLng(mInfo.getLat(),mInfo.getLon())).icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground)));
                     MarkerMap.put(m,mInfo);
+                    imgList.put(m,dataSnapshot.getKey()+ ".jpg");
                     //Toast.makeText(MapsActivity.this,"uouououu",Toast.LENGTH_SHORT).show();
                 }
 
@@ -236,6 +238,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent myIntent = new Intent(MapsActivity.this, Cam.class);
         myIntent.putExtra("lat", latLng.latitude);
         myIntent.putExtra("lon", latLng.longitude);
+        myIntent.putExtra("uid",user.getUid());
+        myIntent.putExtra("name",user.getDisplayName());
         startActivity(myIntent);
 //        MarkerInfo mInfo = new MarkerInfo(latLng.latitude, latLng.longitude, user.getUid(),user.getDisplayName(), 0,0);
 //        database.push().setValue(mInfo);
@@ -247,6 +251,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent mIntent = new Intent(MapsActivity.this, MarkerData.class);
         mIntent.putExtra("name",MarkerMap.get(marker).getUserName());
         mIntent.putExtra("rating",MarkerMap.get(marker).getRating());
+        mIntent.putExtra("fName", imgList.get(marker));
         startActivity(mIntent);
         return false;
     }
