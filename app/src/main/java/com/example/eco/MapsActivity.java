@@ -1,6 +1,7 @@
 package com.example.eco;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -35,12 +37,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener{
     private static final int RC_SIGN_IN =123 ;
     //auth variables
     private FirebaseAuth auth;
@@ -69,6 +74,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.getUiSettings().setAllGesturesEnabled(true);
             mMap.setOnMapClickListener(this);
             mMap.setOnMarkerClickListener(this);
+         //   mMap.setOnMapLongClickListener(this);
 
 
             ChildEventListener cEventListener = new ChildEventListener() {
@@ -235,24 +241,80 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                .icon(BitmapDescriptorFactory.fromResource(R.drawable.lm_foreground));
 //        mMap.addMarker(markerOptions);
 //
-        Intent myIntent = new Intent(MapsActivity.this, Cam.class);
+        final Intent myIntent = new Intent(MapsActivity.this, Cam.class);
         myIntent.putExtra("lat", latLng.latitude);
         myIntent.putExtra("lon", latLng.longitude);
         myIntent.putExtra("uid",user.getUid());
         myIntent.putExtra("name",user.getDisplayName());
-        startActivity(myIntent);
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
+        alert.setMessage("Do you want to mark this location? ").setCancelable(true)
+                .setPositiveButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                })
+                .setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(myIntent);
+                    }
+                });
+        AlertDialog alertDialog = alert.create();
+        alertDialog.setTitle("Confirm Location");
+        alertDialog.show();
+
 //        MarkerInfo mInfo = new MarkerInfo(latLng.latitude, latLng.longitude, user.getUid(),user.getDisplayName(), 0,0);
 //        database.push().setValue(mInfo);
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(MapsActivity.this, "Wait for Info" , Toast.LENGTH_LONG).show();
-        Intent mIntent = new Intent(MapsActivity.this, MarkerData.class);
+    public boolean onMarkerClick(final Marker marker) {
+        final Intent mIntent = new Intent(MapsActivity.this, MarkerData.class);
         mIntent.putExtra("name",MarkerMap.get(marker).getUserName());
         mIntent.putExtra("rating",MarkerMap.get(marker).getRating());
         mIntent.putExtra("fName", imgList.get(marker));
-        startActivity(mIntent);
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
+        alert.setMessage("Select any one ").setCancelable(true)
+                .setPositiveButton("View marker's info", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MapsActivity.this, "Wait for Info" , Toast.LENGTH_LONG).show();
+                        startActivity(mIntent);
+                    }
+                })
+                .setNegativeButton("Delete marker", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                            AlertDialog.Builder del = new AlertDialog.Builder(MapsActivity.this);
+                            del.setMessage("Delete this marker?");
+                            del.setCancelable(true);
+                            del.setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(MapsActivity.this, "Marker deleted", Toast.LENGTH_SHORT).show();
+                                    marker.remove();
+                                }
+                            });
+                            del.setPositiveButton("NO", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            AlertDialog delMark = del.create();
+                            delMark.setTitle("Alert");
+                            delMark.show();
+                        }
+                });
+        AlertDialog alertDialog = alert.create();
+        alertDialog.setTitle("!!");
+        alertDialog.show();
+
+//        startActivity(mIntent);
         return false;
     }
 }

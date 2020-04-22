@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.eco">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -19,7 +20,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Cam"></activity>
+        <activity android:name=".LocationConfirm"
+            android:theme="@style/AppTheme.CustomTheme">
+        </activity>
+
+        <activity android:name=".Cam" />
         <activity android:name=".SignInActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -44,7 +49,7 @@
         </activity>
         <activity
             android:name=".MarkerData"
-            android:theme="@style/AppTheme.CustomTheme"></activity>
+            android:theme="@style/AppTheme.CustomTheme" />
     </application>
 
 </manifest>

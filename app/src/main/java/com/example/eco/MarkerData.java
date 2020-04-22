@@ -29,7 +29,7 @@ public class MarkerData extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         final ImageView imgv = (ImageView) findViewById(R.id.img);
-        getWindow().setLayout((int) (width* 0.65) ,(int) (height * 0.65));
+        getWindow().setLayout((int) (width* 0.70) ,(int) (height * 0.70));
         TextView tv1 = (TextView) findViewById(R.id.t1);
         String str = "Created by: ";
         str = str + mIntent.getStringExtra("name") + "\nRating = " + mIntent.getIntExtra("rating",0);

@@ -86,6 +86,5 @@ public class Cam extends AppCompatActivity {
             });
         }
     }
-
 }
 
